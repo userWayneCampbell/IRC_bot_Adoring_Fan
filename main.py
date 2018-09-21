@@ -32,19 +32,19 @@ channel = parsed.channel
 botnick = "Adoring_Fan"
 
 irc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-print "connecting to:"+server
+print(f"connecting to: {server}")
 irc.connect((server, 6667))
-irc.send("USER "+ botnick +" "+ botnick +" "+ botnick +" :Hmmmm!\n")
-irc.send("NICK "+ botnick +"\n")
+irc.send(f"USER {botnick} {botnick} {botnick} :Hmmmm!" + "\n")
+irc.send(f"NICK {botnick}\n")
 time.sleep(5)
-irc.send("JOIN "+ channel +"\n")
+irc.send(f"JOIN {channel}\n")
 time.sleep(2)
 
 # Register name
 if parsed.register:
-    irc.send("PRIVMSG idlerpg :REGISTER Adoring_Fan " + parsed.password + " Bosmer" + "\n")
+    irc.send(f"PRIVMSG idlerpg :REGISTER Adoring_Fan {parsed.password} Bosmer\n")
     time.sleep(2)
-irc.send("PRIVMSG idlerpg :LOGIN Adoring_Fan " + parsed.password + "\n")
+irc.send(f"PRIVMSG idlerpg :LOGIN Adoring_Fan {parsed.password}\n")
 time.sleep(10)
 
 def print_random():
@@ -61,8 +61,7 @@ def print_random():
             "I'm just so happy to be here, standing in the glory of CayneWambell!",
             "Does anyone here have any sweetrolls?",
             "I feel so alone, doesn't anyone else talk? We should be talking about how great CayneWambell is!"]
-    print(random.choice(s_rand))
-    irc.send("PRIVMSG " + channel + " :" + random.choice(s_rand) + "\n")
+    irc.send(f"PRIVMSG {channel} :{random.choice(s_rand)}\n")
 
 last_time = 0
 try:
@@ -73,20 +72,18 @@ try:
         if int(time.strftime("%H")) != last_time:
             print_random()
             last_time = int(time.strftime("%H"))
-            print("new time:" + str(last_time))
 
         if text.find('PING') != -1:
-            irc.send('PONG ' + text.split() [1] + '\r\n')
+            irc.send(f"PONG {text.split() [1]}\r\n")
         if 'CayneWambell' in text:
-            print("found")
             if 'lost' in text and text.count("CayneWambell") == 2:
-                irc.send("PRIVMSG " + channel + " :CayneWambell is the greatest player alive, I fear the next time you face him in battle for you will surely lose" + "\n")
+                irc.send(f"PRIVMSG {channel} :CayneWambell is the greatest player alive, I fear the next time you face him in battle for you will surely lose\n")
             if 'lost' in text and text.count("CayneWambell") == 1:
-                irc.send("PRIVMSG " + channel + " :You should have never tried to beat CayneWambell, for I know he is the best" + "\n")
+                irc.send(f"PRIVMSG {channel} :You should have never tried to beat CayneWambell, for I know he is the best\n")
             if 'won' in text and text.count("CayneWambell") == 2:
-                irc.send("PRIVMSG " + channel + " :CayneWambell is the greatest player alive, All bow down before his greatness" + "\n")
+                irc.send(f"PRIVMSG {channel} :CayneWambell is the greatest player alive, All bow down before his greatness\n")
             if 'won' in text and text.count("CayneWambell") == 1:
-                irc.send("PRIVMSG " + channel + " :How dare you strike down the great CayneWambell, he will be sure to remember this" + "\n")
+                irc.send(f"PRIVMSG {channel} :How dare you strike down the great CayneWambell, he will be sure to remember this\n")
 
 except KeyboardInterrupt:
     print('rip')

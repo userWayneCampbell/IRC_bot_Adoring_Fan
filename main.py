@@ -3,24 +3,32 @@ import sys
 import time
 import random
 import argparse
-#from datetime import *
 
 ##
-# IRC bot created for idlebot, simulates the Adoring Fan from Oblivion
+# IRC bot created for idlebot, simulates the Adoring Fan from Oblivion.
+#
+# Strike fear into your enemies
+# Oblivion memes and dialog
+#
 # Author: Wayne Campbell
 ##
+
 parser = argparse.ArgumentParser(description='Connect to irc with idlerpg')
-parser.add_argument('server', type=int, required=True,
+parser.add_argument('server', type=str,
                     help='ip address for irc server')
-parser.add_argument('password', type=int, required=True,
+parser.add_argument('password', type=str,
                     help='password for idlerpg')
-parser.add_argument('-c','--channel', required=False,
-                    help='channel to connect to, default: #idlerpg')
-parser.add_argument('-r','--register', required=False,
+parser.add_argument('-c','--channel', required=False, default='#irpg',
+                    help='channel to connect to, default: #irpg')
+parser.add_argument('-r','--register', required=False, action="store_true",
                     help='used to register a idlerpg character the first time')
 
-server = "matrix.pretalen.com"
-channel = "#irpg"
+# Parse arguments
+parsed = parser.parse_args()
+
+# Set Variables
+server = parsed.server
+channel = parsed.channel
 botnick = "Adoring_Fan"
 
 irc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -31,10 +39,12 @@ irc.send("NICK "+ botnick +"\n")
 time.sleep(5)
 irc.send("JOIN "+ channel +"\n")
 time.sleep(2)
-# Use this the first time to create your character
-#irc.send("PRIVMSG idlerpg :REGISTER Adoring_Fan 5123 Bosmer" + "\n")
-#time.sleep(2)
-irc.send("PRIVMSG idlerpg :LOGIN Adoring_Fan 5123" + "\n")
+
+# Register name
+if parsed.register:
+    irc.send("PRIVMSG idlerpg :REGISTER Adoring_Fan " + parsed.password + " Bosmer" + "\n")
+    time.sleep(2)
+irc.send("PRIVMSG idlerpg :LOGIN Adoring_Fan " + parsed.password + "\n")
 time.sleep(10)
 
 def print_random():
@@ -79,4 +89,4 @@ try:
                 irc.send("PRIVMSG " + channel + " :How dare you strike down the great CayneWambell, he will be sure to remember this" + "\n")
 
 except KeyboardInterrupt:
-    print('interrupted!')
+    print('rip')

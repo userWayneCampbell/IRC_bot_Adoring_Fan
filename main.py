@@ -61,19 +61,19 @@ def print_random():
             "I'm just so happy to be here, standing in the glory of CayneWambell!",
             "Does anyone here have any sweetrolls?",
             "I feel so alone, doesn't anyone else talk? We should be talking about how great CayneWambell is!"]
-    print(random.choice(s_rand))
     irc.send("PRIVMSG " + channel + " :" + random.choice(s_rand) + "\n")
 
-last_time = 0
+last_time = int(time.strftime("%H"))
 try:
     while True:
         text=irc.recv(2040)
         print(text)
 
         if int(time.strftime("%H")) != last_time:
-            print_random()
             last_time = int(time.strftime("%H"))
             print("new time:" + str(last_time))
+            if last_time % 4 == 0:
+                print_random()
 
         if text.find('PING') != -1:
             irc.send('PONG ' + text.split() [1] + '\r\n')
